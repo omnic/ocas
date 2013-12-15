@@ -28,7 +28,7 @@ int main (int argc, char **argv) {
 			as (argv);
 			break;
 		case 'd':	// "ocdis"
-			fputs ("the disassembler ain't implemented yet, son\n");
+			fputs ("the disassembler ain't implemented yet, son\n", stderr);
 			break;
 		default :
 			fputs ("Bad invocation: \"", stderr);
