@@ -4,12 +4,6 @@
 // Copyright 2013 Haneef Mubarak
 // All Rights Reserved
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdint.h>
-#include <assert.h>
-
 #include "ocas.h"
 
 int main (int argc, char **argv) {
