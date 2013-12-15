@@ -6,4 +6,6 @@
 int ocas_error_help	(int error);
 int ocas_error_toomanyargs (int argc);
 
+int as	(char **argv);
+
 // that's all folks

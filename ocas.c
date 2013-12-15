@@ -31,12 +31,10 @@ int main (int argc, char **argv) {
 	invocation += 3;	// Get to the start of the command name
 	switch (*invocation) {
 		case 'a':	// "ocas"
-			assert (invocation = malloc (1));
-			*invocation = 0;
+			as (argv);
 			break;
 		case 'd':	// "ocdis"
-			assert (invocation = malloc (1));
-			*invocation = 1;
+			fputs ("the disassembler ain't implemented yet, son\n");
 			break;
 		default :
 			fputs ("Bad invocation: \"", stderr);
