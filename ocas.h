@@ -8,6 +8,15 @@
 #include <string.h>
 #include <stdint.h>
 #include <assert.h>
+#include <unistd.h>
+
+typedef struct {
+	uint32_t	line;
+	uint32_t	file;
+
+	unsigned int	isComment		:1;	// We don't need to process comments
+	unsigned int	isSpecial		:1;	// Handle special instructions differently
+} sourceLine;
 
 int ocas_error_help	(int error);
 int ocas_error_toomanyargs (int argc);
