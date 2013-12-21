@@ -17,4 +17,3 @@ typedef struct {
 int mmapFile		(char *filename, mapFileStruct *mFS);
 int mremapFile		(off_t newSize, mapFileStruct *mFS);
 int munmapFile		(mapFileStruct *mFS);
-
