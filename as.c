@@ -19,7 +19,7 @@ int as (char **argv) {
 }
 
 int mmapFile (char *filename, mapFileStruct *mapfile) {
-	int  x, y;
+	int  x;
 
 	struct stat statbuf;
 
@@ -55,6 +55,20 @@ int mmapFile (char *filename, mapFileStruct *mapfile) {
 
 		return -4;	// mmap failed
 	}
+
+	return 0;
+}
+
+int munmapFile (mapFileStruct *mapfile) {
+	int x;
+
+	if (! munmap (mapfile->addr, mapfile->len)) {
+		return -1;	// munmap failed
+	}
+
+	do {
+		x = close (mapfile->fd);
+	} while ((x != 0) && (errno == EINTR));
 
 	return 0;
 }
