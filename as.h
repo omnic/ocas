@@ -7,13 +7,15 @@ typedef struct {
 	void	*addr;
 	size_t	len;
 	int	prot;
-	int	flags;
+	int	m_flag;
+	int	o_flag;
+	int	lock;
 	int	fd;
 	off_t	offset;
 } mapFileStruct;
 
 #pragma pack(pop)
 
-int mmapFile		(char *filename, mapFileStruct *mFS);
-int mremapFile		(off_t newSize, mapFileStruct *mFS);
-int munmapFile		(mapFileStruct *mFS);
+int mmapFile		(char *filename, mapFileStruct *mapfile);
+int mremapFile		(off_t newSize, mapFileStruct *mapfile);
+int munmapFile		(mapFileStruct *mapfile);

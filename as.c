@@ -17,3 +17,45 @@ int as (char **argv) {
 	assert (source_ptr != MAP_FAILED);
 
 	
+}
+
+int mmapFile (char *filename, mapFileStruct *mapfile) {
+	int  x, y;
+
+	struct stat statbuf;
+
+	mapfile->fd = -1;
+	if ((mapfile->fd = open (filename, mapfile->o_flag)) == -1) {
+		return -1;	// open failed
+	}
+
+	if (flock (mapfile->fd, mapfile->lock) == -1)
+		do {
+			x = close (mapfile->fd);
+		} while ((x != 0) && (errno == EINTR);
+
+		return -2;	// locking failed
+	}
+
+	if (!fstat (mapfile->fd, &statbuf)) {
+		do {
+			x = close (mapfile->fd);
+		} while ((x != 0) && (errno == EINTR);
+
+		return -3;	// fstat failed
+	}
+
+	mapfile->len = statbuf.st_size;
+	mapfile->fd = mmap (NULL, mapfile->len, mapfile->prot,
+					mapfile->m_flag, mapfile->fd,
+					mapfile->offset);
+	if (!(mapfile->fd)) {
+		do {
+			x = close (mapfile->fd);
+		} while ((x != 0) && (errno == EINTR);
+
+		return -4;	// mmap failed
+	}
+
+	return 0;
+}
