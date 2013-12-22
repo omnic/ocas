@@ -3,6 +3,7 @@
 
 #include "as.h"
 
+#if 0	// exclude until complete
 int as (char **argv) {
 	int source_fd = -1;
 	assert ((source_fd = open (argv[1], O_RDONLY, 0) != -1);
@@ -17,6 +18,7 @@ int as (char **argv) {
 	assert (source_ptr != MAP_FAILED);
 
 }
+#endif
 
 int mmapFile (char *filename, mapFileStruct *mapfile) {
 	int  x;
@@ -28,18 +30,18 @@ int mmapFile (char *filename, mapFileStruct *mapfile) {
 		return -1;	// open failed
 	}
 
-	if (flock (mapfile->fd, mapfile->lock) == -1)
+	if (flock (mapfile->fd, mapfile->lock) == -1) {
 		do {
 			x = close (mapfile->fd);
-		} while ((x != 0) && (errno == EINTR);
+		} while ((x != 0) && (errno == EINTR));
 
 		return -2;	// locking failed
 	}
 
-	if (!fstat (mapfile->fd, &statbuf)) {
+	if (!fstat (mapfile->fd, &statbuf) == 0) {
 		do {
 			x = close (mapfile->fd);
-		} while ((x != 0) && (errno == EINTR);
+		} while ((x != 0) && (errno == EINTR));
 
 		return -3;	// fstat failed
 	}
@@ -51,7 +53,7 @@ int mmapFile (char *filename, mapFileStruct *mapfile) {
 	if (!(mapfile->addr)) {
 		do {
 			x = close (mapfile->fd);
-		} while ((x != 0) && (errno == EINTR);
+		} while ((x != 0) && (errno == EINTR));
 
 		return -4;	// mmap failed
 	}

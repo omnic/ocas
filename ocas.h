@@ -9,6 +9,13 @@
 #include <stdint.h>
 #include <assert.h>
 #include <unistd.h>
+#include <errno.h>
+
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <sys/file.h>
+
+#include <fcntl.h>
 
 typedef struct {
 	uint32_t	line;
