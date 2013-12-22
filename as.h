@@ -6,7 +6,7 @@
 typedef struct {
 	void	*addr;
 	size_t	len;
-	int	prot;
+	int	m_prot;
 	int	m_flag;
 	int	o_flag;
 	int	lock;

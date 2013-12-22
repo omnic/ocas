@@ -16,7 +16,6 @@ int as (char **argv) {
 					MAP_FILE | MAP_SHARED, source_fd, 0);
 	assert (source_ptr != MAP_FAILED);
 
-	
 }
 
 int mmapFile (char *filename, mapFileStruct *mapfile) {
@@ -46,7 +45,7 @@ int mmapFile (char *filename, mapFileStruct *mapfile) {
 	}
 
 	mapfile->len = statbuf.st_size;
-	mapfile->fd = mmap (NULL, mapfile->len, mapfile->prot,
+	mapfile->fd = mmap (NULL, mapfile->len, mapfile->m_prot,
 					mapfile->m_flag, mapfile->fd,
 					mapfile->offset);
 	if (!(mapfile->fd)) {
