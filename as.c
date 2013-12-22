@@ -3,8 +3,47 @@
 
 #include "as.h"
 
+mapFileStruct mainsource_file;
+void *mainfile;
+
 #if 0	// exclude until complete
 int as (char **argv) {
+	int x;
+
+	// Set the settings for the mainfile mmap
+	mainsource_file.m_prot	= PROT_READ;
+	mainsource_file.m_flag	= MAP_FILE | MAP_SHARED;
+	mainsource_file.o_flag	= O_RDONLY;
+	mainsource_file.lock	= LOCK_EX;
+	mainsource_file.offset	= 0;
+	// mmap the mainfile
+	if (x = mmapFile (argv[1], &mainsource_file)) {
+		// couldn't open the mainfile, explain and GTFO
+
+		fputs ("ocas->as->mmapFile:\t", stderr);
+
+		// switch on the error
+		switch (x) {
+			case -1:	// open failed
+				fputs ("Could not open file:", stderr);
+				break;
+			case -2:	// locking failed
+				fputs ("Failed to obtain an exclusive lock on file:", stderr);
+				break;
+			case -3:	// fstat failed
+				fputs ("stat failed on file:", stderr);
+				break;
+			case -4:
+				fputs ("Was not able to memory map file:", stderr);
+				break;
+			default:
+				fprintf (stderr, "Unknown error (%i) occurred with file:", x);
+				break;
+		}
+
+		fprintf (stderr, "\t'%s'\n", argv[1]);
+		return -2; // file error
+	}
 }
 #endif
 
