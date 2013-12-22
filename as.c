@@ -45,10 +45,10 @@ int mmapFile (char *filename, mapFileStruct *mapfile) {
 	}
 
 	mapfile->len = statbuf.st_size;
-	mapfile->fd = mmap (NULL, mapfile->len, mapfile->m_prot,
+	mapfile->addr = mmap (NULL, mapfile->len, mapfile->m_prot,
 					mapfile->m_flag, mapfile->fd,
 					mapfile->offset);
-	if (!(mapfile->fd)) {
+	if (!(mapfile->addr)) {
 		do {
 			x = close (mapfile->fd);
 		} while ((x != 0) && (errno == EINTR);
