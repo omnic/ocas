@@ -46,8 +46,8 @@ int mmapFile (char *filename, mapFileStruct *mapfile) {
 
 	mapfile->len = statbuf.st_size;
 	mapfile->addr = mmap (NULL, mapfile->len, mapfile->m_prot,
-					mapfile->m_flag, mapfile->fd,
-					mapfile->offset);
+				mapfile->m_flag, mapfile->fd,
+				mapfile->offset);
 	if (!(mapfile->addr)) {
 		do {
 			x = close (mapfile->fd);
@@ -62,7 +62,7 @@ int mmapFile (char *filename, mapFileStruct *mapfile) {
 int munmapFile (mapFileStruct *mapfile) {
 	int x;
 
-	if (! munmap (mapfile->addr, mapfile->len)) {
+	if (!munmap (mapfile->addr, mapfile->len)) {
 		return -1;	// munmap failed
 	}
 
@@ -71,4 +71,28 @@ int munmapFile (mapFileStruct *mapfile) {
 	} while ((x != 0) && (errno == EINTR));
 
 	return 0;
+}
+
+int mremapFile (off_t newSize, mapFileStruct *mapfile) {
+	int status = 0;
+
+	if (!ftruncate (mapfile->fd, newSize)) {
+		return -1;	// ftruncate failed
+	}
+
+	void *addr = mmap (NULL, newSize, mapfile->m_prot,
+				mapfile->m_flag, mapfile->fd,
+				mapfile->offset);
+	if (!addr) {
+		return -2;	// mmap new range failed
+	}
+
+	if (!munmap (mapfile->addr, mapfile->len)) {
+		status = 1;	// munmap old range failed
+	}
+
+	mapfile->addr = addr;
+	mapfile->len = newSize;
+
+	return status;
 }
