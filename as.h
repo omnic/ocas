@@ -14,10 +14,17 @@ typedef struct {
 	off_t	offset;
 } mapFileStruct;
 
+typedef struct {
+	mapFileStruct	*file;
+	size_t	linecount;
+	char	**line;
+} sourceFileStruct;
+
 #pragma pack(pop)
 
 int mmapFile		(char *filename, mapFileStruct *mapfile);
 int mremapFile		(off_t newSize, mapFileStruct *mapfile);
 int munmapFile		(mapFileStruct *mapfile);
 
-int getlines		(char *string, char ***lines, int *linecount);
+int getlines		(char *string, char ***lines, size_t *linecount);
+int getSourceFile	(mapFileStruct *mapfile, sourceFileStruct *sourcefile);

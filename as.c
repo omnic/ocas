@@ -4,7 +4,6 @@
 #include "as.h"
 
 mapFileStruct mainsource_file;
-void *mainfile;
 
 #if 0	// exclude until complete
 int as (char **argv) {
@@ -44,6 +43,9 @@ int as (char **argv) {
 		fprintf (stderr, "\t'%s'\n", argv[1]);
 		return -2; // file error
 	}
+
+	// Get an array of lines
+	sourceFile mainfile;
 }
 #endif
 
@@ -126,11 +128,11 @@ int mremapFile (off_t newSize, mapFileStruct *mapfile) {
 	return status;
 }
 
-int getlines (char *string, char ***lines, int *linecount) {
-	int ptrcount = 256, countscale = 256, x;
+int getlines (char *string, char ***lines, size_t *linecount) {
+	int ptrcount = 256, countscale = 256;
 	char *start, *end;
 
-	int limit = strlen (string);
+	size_t limit = strlen (string);
 
 	if (!(*lines = malloc (ptrcount * sizeof (char *)))) {
 		return 1;	// insufficient memory
@@ -165,4 +167,11 @@ int getlines (char *string, char ***lines, int *linecount) {
 	}
 
 	return 0;
+}
+
+int getSourceFile (mapFileStruct *mapfile, sourceFileStruct *sourcefile) {
+	sourcefile->file = mapfile;
+
+	return getlines ((char *) sourcefile->file->addr, &(sourcefile->line),
+			&(sourcefile->linecount));
 }
