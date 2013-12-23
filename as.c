@@ -125,3 +125,44 @@ int mremapFile (off_t newSize, mapFileStruct *mapfile) {
 
 	return status;
 }
+
+int getlines (char *string, char ***lines, int *linecount) {
+	int ptrcount = 256, countscale = 256, x;
+	char *start, *end;
+
+	int limit = strlen (string);
+
+	if (!(*lines = malloc (ptrcount * sizeof (char *)))) {
+		return 1;	// insufficient memory
+	}
+
+	start = string;
+	*linecount = 0;
+
+	while ((end = strchr (start, 0x00))) {
+		if (!(*lines[*linecount] = strndup (start, (end - start)))) {
+			return 1;	// insufficient memory
+		}
+
+		(*linecount)++;
+		// Check that we have more memory
+		if (*linecount == ptrcount) {
+			// Make sure our scaling is fast enough
+			while ((ptrcount >= (countscale * 4)) && (countscale < 65536)) {
+				countscale = countscale * 4;
+			}
+
+			ptrcount += countscale;
+
+			// Make sure our realloc works
+			if (!(*lines = realloc (*lines, ptrcount * sizeof (char *)))) {
+				return 1;	//insufficient memory
+			}
+		}
+
+		// setup for round two
+		start = end + 1;
+	}
+
+	return 0;
+}

@@ -19,3 +19,5 @@ typedef struct {
 int mmapFile		(char *filename, mapFileStruct *mapfile);
 int mremapFile		(off_t newSize, mapFileStruct *mapfile);
 int munmapFile		(mapFileStruct *mapfile);
+
+int getlines		(char *string, char ***lines, int *linecount);
