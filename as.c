@@ -3,11 +3,10 @@
 
 #include "as.h"
 
-mapFileStruct mainsource_file;
-
 #if 0	// exclude until complete
-int as (char **argv) {
+int as (char *filepath) {
 	int x;
+	mapFileStruct mainsource_file;
 
 	// Set the settings for the mainfile mmap
 	mainsource_file.m_prot	= PROT_READ;
@@ -16,7 +15,7 @@ int as (char **argv) {
 	mainsource_file.lock	= LOCK_EX;
 	mainsource_file.offset	= 0;
 	// mmap the mainfile
-	if (x = mmapFile (argv[1], &mainsource_file)) {
+	if (x = mmapFile (filepath, &mainsource_file)) {
 		// couldn't open the mainfile, explain and GTFO
 
 		fputs ("ocas->as->mmapFile:\t", stderr);
@@ -41,11 +40,14 @@ int as (char **argv) {
 		}
 
 		fprintf (stderr, "\t'%s'\n", argv[1]);
-		return -2; // file error
+		return -2;	// file error
 	}
 
 	// Get an array of lines
 	sourceFile mainfile;
+	if (getSourceFile (&mainsource_file, &mainfile)) {
+		return 1;	// memory error
+	}
 }
 #endif
 

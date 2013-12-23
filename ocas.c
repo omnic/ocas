@@ -25,7 +25,7 @@ int main (int argc, char **argv) {
 	invocation += 3;	// Get to the start of the command name
 	switch (*invocation) {
 		case 'a':	// "ocas"
-			as (argv);
+			as (argv[1]);
 			break;
 		case 'd':	// "ocdis"
 			fputs ("the disassembler ain't implemented yet, son\n", stderr);
