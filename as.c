@@ -15,7 +15,7 @@ int as (char *filepath) {
 	mainsource_file.lock	= LOCK_EX;
 	mainsource_file.offset	= 0;
 	// mmap the mainfile
-	if (x = mmapFile (filepath, &mainsource_file)) {
+	if ((x = mmapFile (filepath, &mainsource_file))) {
 		// couldn't open the mainfile, explain and GTFO
 
 		fputs ("ocas->as->mmapFile:\t", stderr);
@@ -39,15 +39,17 @@ int as (char *filepath) {
 				break;
 		}
 
-		fprintf (stderr, "\t'%s'\n", argv[1]);
+		fprintf (stderr, "\t'%s'\n", filepath);
 		return -2;	// file error
 	}
 
 	// Get an array of lines
-	sourceFile mainfile;
+	sourceFileStruct mainfile;
 	if (getSourceFile (&mainsource_file, &mainfile)) {
 		return 1;	// memory error
 	}
+
+	return 0;
 }
 #endif
 
@@ -143,8 +145,8 @@ int getlines (char *string, char ***lines, size_t *linecount) {
 	start = string;
 	*linecount = 0;
 
-	while ((end = strchr (start, 0x00))) {
-		if (!(*lines[*linecount] = strndup (start, (end - start)))) {
+	while ((end = strchr (start, '\n'))) {
+		if (!((*lines)[*linecount] = strndup (start, (end - start)))) {
 			return 1;	// insufficient memory
 		}
 
@@ -174,6 +176,9 @@ int getlines (char *string, char ***lines, size_t *linecount) {
 int getSourceFile (mapFileStruct *mapfile, sourceFileStruct *sourcefile) {
 	sourcefile->file = mapfile;
 
-	return getlines ((char *) sourcefile->file->addr, &(sourcefile->line),
-			&(sourcefile->linecount));
+	char *data = mapfile->addr;
+	char ***lines = &sourcefile->line;
+	size_t *linecount = &sourcefile->linecount;
+
+	return getlines (data, lines, linecount);
 }
