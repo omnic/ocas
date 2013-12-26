@@ -1,7 +1,11 @@
 #error codelist is not a real header
 
-typedef uint8 size;
-typedef uint256 constant;
+
+// ==========================================================================
+// Data Manipulation
+
+typedef uint8 size{0,32,1};
+typedef uint{8,256,8} constant;
 
 typedef struct {
 	bool sign;
@@ -17,6 +21,7 @@ typedef struct {
 	signsize;
 	int16 place;
 } signsizeplace;
+
 
 // Memory
 0x0001	CPY	size X,		address in,	address out
@@ -75,3 +80,50 @@ typedef struct {
 0x0100	HAL	address A,	address B,	address S,	address C
 0x0101	FAL	address A,	address B,	address S,	address Cin
 		address Cout
+
+
+// ==========================================================================
+// Overall Program & Control Flow
+
+typedef int32 relative;
+
+
+// Start / End
+0xF001	ENTR	stack:head
+0xF002	EXIT	stack:ret
+
+// Functions
+0xF010	CALL	address func,	stack:args
+0xF011	RET	stack:data
+
+// Stack
+0xF020	PUSH	size in,	address in
+0xF021	POP	size out,	address out
+0xF022	PUT	size in,	address rel,	address in
+0xF023	PEEK	size out,	address rel,	address out
+
+// Control / Flow
+0xF030	COND	address true
+0xF031	JUMP	relative position
+0xF032	SKIP	int16 cycles
+
+// Special Control Flow
+0xF040	FORS	address X,	address Y,	address Z
+0xF041	FORD	NULL16
+
+
+// ==========================================================================
+// Hardware Interfacing
+
+typedef int16 line;
+
+// Setup
+0x4001	DETL	line check,	address out
+0x4002	ENBL	line enable,	address out
+0x4003	DSBL	line disable,	address out
+0x4004	INITL	line start,	address out
+0x4005	DNITL	line end,	address out
+
+// R / W
+0x4010	RXL	size X,		line in,	address out
+0x4011	TXL	size X,		line out,	address in
