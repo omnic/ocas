@@ -3,7 +3,7 @@
 
 #include "as.h"
 
-#if 0	// exclude until complete
+#if 1	// exclude until complete
 int as (char *filepath) {
 	int x;
 	mapFileStruct mainsource_file;
