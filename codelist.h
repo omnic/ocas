@@ -26,6 +26,7 @@ typedef struct {
 // Memory
 0x0001	CPY	size X,		address in,	address out
 0x0002	MOV	size X,		address in,	address out
+0x0003	SWAP	size X,		address A,	address B
 
 // Basic Arithmetic
 0x0010	ADD	signsize A,	address A,	signsize B,	address B
